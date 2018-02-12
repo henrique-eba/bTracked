@@ -1,0 +1,399 @@
+<!doctype html>
+<html>
+
+<head>
+    <title>bTracked</title>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.1.1/jquery.min.js"></script>
+    <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.5.7/angular.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/angular-sanitize/1.5.7/angular-sanitize.min.js"></script>
+    <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.4.8/angular-animate.js"></script>
+    <script src="https://ajax.googleapis.com/ajax/libs/jqueryui/1.12.1/jquery-ui.min.js"></script>
+
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+    <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+    <link rel="stylesheet" href="https://ajax.googleapis.com/ajax/libs/jqueryui/1.12.1/themes/smoothness/jquery-ui.css">
+    <link href="https://fonts.googleapis.com/css?family=Roboto|Libre+Baskerville|Lora|Roboto+Mono" rel="stylesheet">
+
+    <script src="ng-infinite-scroll.min.js"></script>
+
+    <link href="style.css" rel="stylesheet">
+    <script src="bTracked.js"></script>
+
+</head>
+
+<body ng-app="Tracker" ng-controller="trackerController">
+
+    <div>
+        <div id="buttonsPanel" class="inlineBlock">
+            <button ng-click="showAdd()">Add</button>
+            <button ng-click="addCreature();">Add custom</button>
+
+            <div class="separator"></div>
+
+            <button ng-click="rollInitiative(false)">Roll Init</button>
+            <button ng-click="sortByInitiative()">Sort by Init</button>
+
+            <div class="separator"></div>
+
+            <div class="inlineBlock">
+                <button ng-click="nextRound(true)">Start Battle</button>
+                <button ng-click="nextTurn()">Next Turn</button>
+                Turn: {{currentTurn+1}}/{{trackList.length}} | Round: {{currentRound+1}} | Elapsed Time: {{secondsToHms(currentTime)}}
+            </div>
+        </div>
+        
+        <div class="floatRight">
+            <div>
+                Config
+                <button class="mi vaMiddle" ng-click="showFloatDiv('#optionsPanel', $event, true, true);$event.stopPropagation();">settings</button>
+            </div>
+            <div id="optionsPanel" class="shadow abs">
+                <div>
+                    <fieldset>
+                        <legend>General</legend>
+                        <label class="noselect control control--checkbox">Confirm damage after attack
+                            <input ng-model="askDamage" type="checkbox" checked="checked" />
+                            <div class="control__indicator"></div>
+                        </label>
+
+                        <label class="noselect control control--checkbox">Roll initiative for everyone (not just monsters)
+                            <input ng-model="allRollInitiative" type="checkbox" checked="checked" />
+                            <div class="control__indicator"></div>
+                        </label>
+
+                        <label class="noselect control control--checkbox">Confirm removal
+                            <input ng-model="askRemoval" type="checkbox" checked="checked" />
+                            <div class="control__indicator"></div>
+                        </label>
+
+                        <label class="noselect control control--checkbox">Filter out actions without damage dice
+                            <input ng-model="filterActionsWithtouDice" type="checkbox" checked="checked" />
+                            <div class="control__indicator"></div>
+                        </label>
+                    </fieldset>
+                    <fieldset>
+                        <legend>0 HP options</legend>
+
+                        <label class="noselect control control--checkbox">Remove from list if not PC
+                            <input ng-model="removeFromListOnDeath" type="checkbox" checked="checked" />
+                            <div class="control__indicator"></div>
+                        </label>
+
+                        <label class="noselect control control--checkbox">Ignore Turn
+                            <input ng-model="ignoreTurnOnDeath" type="checkbox" checked="checked" />
+                            <div class="control__indicator"></div>
+                        </label>
+
+                    </fieldset>
+
+                    <fieldset>
+                        <legend>Save and Load</legend>
+
+                        <button ng-click="save();">Save</button>
+                        
+                        <label for="loadFile" class="custom-file-upload">
+                            Load
+                        </label>
+
+                        <input id="loadFile" type="file" accept="bTracker/*" onchange="angular.element(this).scope().load()"/>
+
+                    </fieldset>
+
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div id="attackList" class="noselect abs shadow">
+        <div ng-repeat="creature in trackList track by $index">
+            <span ng-hide="selectedItem==creature">
+                <button ng-click="attack(selectedItem, creature)">
+                    {{creature.nickname}}
+                </button>
+            </span>
+        </div>
+    </div>
+
+    <div id="addDiv" class="shadow">
+        <!-- <div class="flexSpace"> -->
+        <!-- <button ng-click="addCreature();">Add custom</button> -->
+        <!-- <div class="handCursor" ng-click="toogleVisibility('.filters')">Advanced filter<span class="mi">expand_more</span></div> -->
+        <!-- </div> -->
+
+        <div class="table panel">
+            <div class="row">
+                <div class="cell paddingR4">
+                    Filter by name
+                    <br>
+                    <input title="Filter by name" ng-model="filterText" placeholder="Name">
+                </div>
+                <div class="cell paddingR4">
+                    CR Range
+                    <br>
+                    <input class="cr" title="Minimum CR" ng-model="minCR" placeholder="Min CR"> to
+                    <input class="cr" title="Maximum CR" ng-model="maxCR" placeholder="Max CR">
+                </div>
+                <div class="cell paddingR4">
+                    Filter by any information
+                    <br>
+                    <input title="Filter by any information" ng-model="filterAnyInfo" placeholder="Any information">
+                </div>
+            </div>
+            <div class="row">
+                <!-- <div class="cell padding4"> -->
+                <!-- <div class="filters"> -->
+                <!-- Filter by size<br> -->
+                <!-- <input title="Filter by size" ng-model="filterSize" placeholder="Size"> -->
+                <!-- </div> -->
+                <!-- </div> -->
+                <!-- <div class="cell padding4"> -->
+                <!-- <div class="filters"> -->
+                <!-- Filter by environment<br> -->
+                <!-- <input title="Filter by environment" ng-model="filterEnvironment" placeholder="Environment"> -->
+                <!-- </div> -->
+                <!-- </div> -->
+
+            </div>
+        </div>
+
+        <!-- <div id="filters"> -->
+        <!-- <input title="Maximum number of results" ng-model="maxResults" placeholder="Results to show"> -->
+        <!-- </div> -->
+        <table class="divScrollHeader">
+            <thead>
+                <tr>
+                    <th ng-click="sortBy('name')">
+                        <sort-Direction header="Name" col="name"></sort-Direction>
+                    </th>
+                    <th ng-click="sortBy('challenge_rating')">
+                        <sort-Direction header="CR" col="challenge_rating"></sort-Direction>
+                    </th>
+                    <th ng-click="sortBy('armor_class')">
+                        <sort-Direction header="AC" col="armor_class"></sort-Direction>
+                    </th>
+                    <th ng-click="sortBy('hit_points')">
+                        <sort-Direction header="HP" col="hit_points"></sort-Direction>
+                    </th>
+                </tr>
+            </thead>
+        </table>
+        <div class="divScroll">
+            <table infinite-scroll-container='".divScroll"' infinite-scroll-distance="2" infinite-scroll="loadMore()">
+                <tbody>
+                    <tr ng-class-odd="'even'" ng-repeat="monster in monsterList | filter:filterByProp('name', filterText) | filter:filterAnyInfo | filter: lesserThan('challenge_rating', maxCR) | filter: greaterThan('challenge_rating', minCR) | orderBy: sortByCol:reverseSort | limitTo:maxResults">
+                        <td>
+                            <div class="flexSpace">
+                                <div class="taLeft">
+                                    <button ng-click="addMonster(monster);" class="mi vaMiddle iconButton noselect">add</button> {{monster.name}}
+                                </div>
+                                <more-Info-Button show-Info="showInfo" monster="monster"></more-Info-Button>
+                            </div>
+                        </td>
+                        <td>{{monster.challenge_rating}}</td>
+                        <td>{{monster.armor_class}}</td>
+                        <td>{{monster.hit_points}}</td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+    </div>
+
+    <stats-block></stats-block>
+    <div class="panel">
+        <table class="trackerList">
+            <tr>
+                <th>Nickname</th>
+                <th>Name</th>
+                <th>Notes</th>
+                <th>Init</th>
+                <th>AC</th>
+                <th>Str</th>
+                <th>Dex</th>
+                <th>Con</th>
+                <th>Int</th>
+                <th>Wis</th>
+                <th>Cha</th>
+                <th>HP</th>
+                <th>Attack</th>
+                <th>Actions</th>
+            </tr>
+            <tr ng-class-odd="'even'" ng-class="{'isTurn':item.isTurn, 'isHit':item.isHit, 'isDead':item.isDead}" ng-repeat="item in trackList track by $index">
+                <td class="noWrap">
+                    <button title="Remove" class="mi vaMiddle iconButton" ng-click="removeMonster(item)">delete</button>
+                    <button title="Duplicate" class="mi vaMiddle iconButton" ng-click="addMonster(item)">content_copy</button>
+                    <button title="Edit" class="mi vaMiddle iconButton" ng-click="addCreature(item)">mode_edit</button>
+                    <input class="bigInput vaMiddle" ng-model="item.nickname">
+                </td>
+                <td>
+                    <div class="flexSpace">
+                        <div class="taLeft">
+                            {{item.name}}
+                        </div>
+                        <more-Info-Button show-Info="showInfo" monster="item"></more-Info-Button>
+                    </div>
+                </td>
+                <td>
+                    <textarea class="bigInput"></textarea>
+                </td>
+                <td>
+                    <input ng-class="{invalidData:dataIsInvalid(item.initiative)}" numericbinding ng-model="item.initiative">
+                </td>
+                <td>
+                    <input ng-class="{invalidData:dataIsInvalid(item.armor_class)}" numericbinding ng-model="item.armor_class">
+                </td>
+                <td>
+                    <input ng-class="{invalidData:dataIsInvalid(item.strength_save)}" numericbinding ng-model="item.strength_save">
+                </td>
+                <td>
+                    <input ng-class="{invalidData:dataIsInvalid(item.dexterity_save)}" numericbinding ng-model="item.dexterity_save">
+                </td>
+                <td>
+                    <input ng-class="{invalidData:dataIsInvalid(item.constitution_save)}" numericbinding ng-model="item.constitution_save">
+                </td>
+                <td>
+                    <input ng-class="{invalidData:dataIsInvalid(item.intelligence_save)}" numericbinding ng-model="item.intelligence_save">
+                </td>
+                <td>
+                    <input ng-class="{invalidData:dataIsInvalid(item.wisdom_save)}" numericbinding ng-model="item.wisdom_save">
+                </td>
+                <td>
+                    <input ng-class="{invalidData:dataIsInvalid(item.charisma_save)}" numericbinding ng-model="item.charisma_save">
+                </td>
+                <td>
+                    <input ng-class="{invalidData:dataIsInvalid(item.hit_points)}" ng-change="checkDead(item)" numericbinding
+                        ng-model="item.hit_points">
+                </td>
+                <td>
+                    <div class="attackCombo noselect" ng-click="showFloatDiv('#attackDropdown_'+$index, $event);$event.stopPropagation();">
+                        <div class="attackComboItem flexSpace" title="{{item.selected_attack.desc}}">
+                            <attack-description attack="item.selected_attack"></attack-description>
+                            <div class="mi vaMiddle expanderButton">expand_more</div>
+                        </div>
+                    </div>
+                    <div id="attackDropdown_{{$index}}" class="attackComboList abs shadow">
+                        <div ng-repeat="attack in item.actions" class="attackComboItem attackComboItemInner" ng-click="item.selected_attack = attack;"
+                            title="{{attack.desc}}" ng-class="{selectedAttack:item.selected_attack.name==attack.name}" ng-hide="$parent.filterActionsWithtouDice === true && attack.damage_dice == null">
+                            <attack-description attack="attack"></attack-description>
+                        </div>
+                    </div>
+                </td>
+                <td>
+                    <button ng-disabled="item.actions.length==0" ng-click="$parent.selectedItem=item;showFloatDiv('#attackList', $event, true, true);$event.stopPropagation();">Attack</button>
+                </td>
+            </tr>
+        </table>
+    </div>
+
+    <div id="createBlankPanel" class="abs shadow">
+        <div>
+            <div class="padding4 flexSpace">
+                <div>Name:
+                    <input placeholder="Name" class="bigInput" ng-model="blankCreature.nickname">
+                </div>
+                <label class="noselect control control--checkbox">Player character
+                    <input ng-model="blankCreature.isPC" type="checkbox" checked="checked" />
+                    <div class="control__indicator"></div>
+                </label>
+            </div>
+
+            <div class="padding4">
+                AC:
+                <input title="AC" placeholder="AC" ng-class="{invalidData:dataIsInvalid(blankCreature.armor_class)}"
+                    numericbinding ng-model="blankCreature.armor_class"> HP:
+                <input title="HP" placeholder="HP" ng-class="{invalidData:dataIsInvalid(blankCreature.hit_points)}"
+                    ng-change="checkDead(blankCreature)" numericbinding ng-model="blankCreature.hit_points"> Init bonus:
+                <input title="Initiative bonus (Ex 2, 1)" placeholder="Init" ng-class="{invalidData:dataIsInvalid(blankCreature.initiative_bonus)}"
+                    numericbinding ng-model="blankCreature.initiative_bonus">
+                <div>
+                    <br>Saving throws/MODs</div>
+                <input title="Str" placeholder="Str" ng-class="{invalidData:dataIsInvalid(blankCreature.strength_save)}" numericbinding ng-model="blankCreature.strength_save">
+                <input title="Dex" placeholder="Dex" ng-class="{invalidData:dataIsInvalid(blankCreature.dexterity_save)}" numericbinding
+                    ng-model="blankCreature.dexterity_save">
+                <input title="Con" placeholder="Con" ng-class="{invalidData:dataIsInvalid(blankCreature.constitution_save)}" numericbinding
+                    ng-model="blankCreature.constitution_save">
+                <input title="Int" placeholder="Int" ng-class="{invalidData:dataIsInvalid(blankCreature.intelligence_save)}" numericbinding
+                    ng-model="blankCreature.intelligence_save">
+                <input title="Wis" placeholder="Wis" ng-class="{invalidData:dataIsInvalid(blankCreature.wisdom_save)}" numericbinding ng-model="blankCreature.wisdom_save">
+                <input title="Cha" placeholder="Cha" ng-class="{invalidData:dataIsInvalid(blankCreature.charisma_save)}" numericbinding ng-model="blankCreature.charisma_save">
+            </div>
+            <div class="padding4">
+                <button ng-click="blankCreature.actions.push({})">Add Action</button>
+                <div class="actionList">
+                    <table>
+                        <tr>
+                            <th>Name</th>
+                            <th>To Hit</th>
+                            <th>Damage
+                                <br>Dice</th>
+                            <th>Damage
+                                <br>Bonus</th>
+                            <th>Description</th>
+                        </tr>
+                        <tr ng-repeat="action in blankCreature.actions" class="newAction">
+                            <td class="noWrap">
+                                <button title="Remove" class="mi vaMiddle iconButton" ng-click="blankCreature.actions.splice($index, 1)">delete</button>
+                                <input title="Action name" placeholder="Name" class="bigInput" ng-model="action.name">
+                            </td>
+                            <td>
+                                <input title="Attack bonus to hit (Ex 2, -1)" placeholder="To hit" ng-model="action.attack_bonus">
+                            </td>
+                            <td>
+                                <input title="Damage dice (Ex: 1d8)" placeholder="Dice" ng-model="action.damage_dice">
+                            </td>
+                            <td>
+                                <input title="Damage bonus (Ex: 3, -2)" placeholder="Bonus" ng-model="action.damage_bonus">
+                            </td>
+                            <td>
+                                <textarea title="Action description" placeholder="Description" class="bigInput" ng-model="action.desc"></textarea>
+                            </td>
+                        </tr>
+                    </table>
+                </div>
+            </div>
+            <div class="flexSpace">
+                <button ng-click="hideAll();">Close</button>
+                <div>
+                    <span id="savedMessage">Saved!</span>
+                    <button ng-click="showSavedMessage();addMonster(blankCreature, false);resetCreature();">Save</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <hr>
+    <div class="panel">
+        <div class="floatLeft rollPanel">
+            <button ng-click="trackRoll('1d20');">d20</button>
+            <button ng-click="trackRoll('1d12');">d12</button>
+            <button ng-click="trackRoll('1d10');">d10</button>
+            <br>
+            <button ng-click="trackRoll('1d8');">d8</button>
+            <button ng-click="trackRoll('1d6');">d6</button>
+            <button ng-click="trackRoll('1d4');">d4</button>
+            <br>
+            <input ng-model="dieRoll" placeholder="1d20+5" ng-init="dieRoll='1d20+1d4+2'">
+            <button ng-click="trackRoll(dieRoll, true);">Roll</button>
+        </div>
+        <div class="floatLeft resultsPanel">
+            <div id="results">
+                <div ng-repeat="result in resultsLog | orderBy:'$index':true track by $index">
+                    <span class="timestamp">{{result.timestamp | date:'HH:mm:ss'}}:</span>
+                    <span ng-bind-html="result.data"></span>
+                    <span ng-if="result.damageID != null">
+                        <div class="confirmButton" ng-click="confirmDamage(result.damageID);result.damageID=null;">Confirm</div>
+                    </span>
+                </div>
+            </div>
+            <button ng-click="clearResultsLog()">Clear history</button>
+        </div>
+        <div class="clear"></div>
+    </div>
+    <hr>
+    <div>
+        <a href="ogl.txt" target="_blank">OGL License
+            <a/>
+    </div>
+
+</body>
+
+</html>

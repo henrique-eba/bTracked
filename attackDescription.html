@@ -1,0 +1,11 @@
+<div class="vaMiddle">
+    <b>{{attack.name}}</b>
+    <span class="desc">
+        <span ng-if="attack.attack_bonus != null">To hit: +{{attack.attack_bonus}}</span> 
+        <span ng-if="attack.damage_dice != null || attack.damage_bonus != null">
+            | Dmg: 
+            <span ng-if="attack.damage_dice != null">{{attack.damage_dice}}</span>
+            <span ng-if="attack.damage_bonus != null"> (<span ng-if="attack.damage_bonus > 0">+</span>{{attack.damage_bonus}})</span>
+        </span>
+    </span>
+</div>

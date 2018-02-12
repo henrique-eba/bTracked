@@ -1,0 +1,62 @@
+<div id="statBlock" class="shadow"> 
+    <p class="name">{{currentMonsterInfo.name}}</p>
+    <p class="description">{{currentMonsterInfo.size}} {{currentMonsterInfo.type}} {{currentMonsterInfo.subtype}} {{currentMonsterInfo.alignment}}</p>
+    <hr>
+    <div class="table width100pct">
+        <div class="cell taCenter"><b>Armor Class </b> {{currentMonsterInfo.armor_class}}</div>
+        <div class="cell taCenter"><b>Hit Points </b> {{currentMonsterInfo.hit_points}}</div>
+        <div class="cell taCenter"><b>Speed </b> {{currentMonsterInfo.speed}}</div>
+    </div>
+    <hr class="ability">
+        <table class="abilityTable" align="center" width="100%">
+            <tr>
+                <th>STR</th>
+                <th>DEX</th>
+                <th>CON</th>
+                <th>INT</th>
+                <th>WIS</th>
+                <th>CHA</th>
+            </tr>
+            <tr>
+                <td>{{currentMonsterInfo.strength}} ({{currentMonsterInfo.strength_mod}})</td>
+                <td>{{currentMonsterInfo.dexterity}} ({{currentMonsterInfo.dexterity_mod}})</td>
+                <td>{{currentMonsterInfo.constitution}} ({{currentMonsterInfo.constitution_mod}})</td>
+                <td>{{currentMonsterInfo.intelligence}} ({{currentMonsterInfo.intelligence_mod}})</td>
+                <td>{{currentMonsterInfo.wisdom}} ({{currentMonsterInfo.wisdom_mod}})</td>
+                <td>{{currentMonsterInfo.charisma}} ({{currentMonsterInfo.charisma_mod}})</td>
+            </tr>
+        </table>
+    <hr class="ability">
+    <div class="properties">
+        <div ng-if="currentMonsterInfo.damage_immunities"><b>Damage Immunities </b> {{currentMonsterInfo.damage_immunities}}</div>
+        <div ng-if="currentMonsterInfo.condition_immunities"><b>Condition Immunities </b> {{currentMonsterInfo.condition_immunities}}</div>
+        <div ng-if="currentMonsterInfo.damage_vulnerabilities"><b>Damage Vulnerabilities </b> {{currentMonsterInfo.damage_vulnerabilities}}</div>
+        <div ng-if="currentMonsterInfo.damage_resistances"><b>Damage Resistances </b> {{currentMonsterInfo.damage_resistances}}</div>
+        <div ng-if="currentMonsterInfo.senses"><b>Senses </b> {{currentMonsterInfo.senses}}</div>
+        <div ng-if="currentMonsterInfo.languages"><b>Languages </b> {{currentMonsterInfo.languages}}</div>
+        <div><b>Challenge </b> {{currentMonsterInfo.challenge_rating}} ({{xpTable[currentMonsterInfo.challenge_rating]}} XP)</div>
+        
+        <div ng-if="currentMonsterInfo.special_abilities.length > 0">
+            <hr>
+            <div ng-repeat="special in currentMonsterInfo.special_abilities">
+                <div><b>{{special.name}} </b> {{special.desc}} Atk Bonus: {{special.attack_bonus}}</div>
+            </div>
+        </div>
+        
+        <div ng-if="currentMonsterInfo.actions.length > 0">
+            <hr>
+            <span class="title">Actions</span>
+            <div ng-repeat="action in currentMonsterInfo.actions">
+                <div><b>{{action.name}} </b> {{action.desc}}</div>
+            </div>
+        </div>
+
+        <div ng-if="currentMonsterInfo.legendary_actions.length > 0">
+            <hr>
+            <span class="title">Legendary Actions</span>
+            <div ng-repeat="legendaryAction in currentMonsterInfo.legendary_actions">
+                <div><b>{{legendaryAction.name}} </b> {{legendaryAction.desc}} Atk Bonus: {{legendaryAction.attack_bonus}}</div>
+            </div>
+        </div>
+    </div>
+</div>

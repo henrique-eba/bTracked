@@ -1,0 +1,645 @@
+html, body, table, input, button, label, textarea {
+    font-family: "Roboto", Georgia, serif;
+    font-size: 12px;
+    color: #333;
+}
+
+input, textarea {
+    border: 1px solid #E0E0E0;
+    color: #333;
+    padding: 2px;
+}
+
+fieldset {
+    margin: 8px;
+    border: 1px solid #E0E0E0;
+    padding: 8px;
+    border-radius: 3px;
+}
+
+
+.hidden {
+    opacity: 0;
+}
+
+.name {
+    font-weight: bold;
+    margin: 0px;
+    font-size: 18px;
+    font-family: 'Libre Baskerville', 'Lora', "Roboto", Georgia, serif;
+}
+
+.description {
+    font-size: 10px;
+    color: #333;
+    margin: 0px;
+}
+
+#results {
+    border: 1px solid #E0E0E0;
+    padding: 10px;
+    background: #FFF;
+    overflow-y: auto;
+    height: 150px;
+    width: 500px;
+    font-size: 10px;
+    font-family: "Roboto Mono", "Roboto", Georgia, serif;
+    color: #000;
+}
+
+#results .timestamp {
+    color: #999;
+    font-size: 8px;
+}
+
+.panel {
+    margin: 4px 0px;
+}
+
+.resultsPanel button {
+    margin: 4px 0px;
+}
+
+.rollPanel button {
+    width: 45px;
+    margin: 4px;
+}
+
+.rollPanel input {
+    width: 95px;
+    margin: 4px;
+}
+
+#addDiv {
+    position: absolute;
+    display: none;
+    border: 1px solid #CCC;
+    padding: 10px;
+    background: #FFF;
+    z-index: 1;
+    max-height: 40%;
+    width: 25%;
+    min-width: 325px;
+    margin-top: 4px;
+}
+
+#addDiv .cr {
+    width: 45px;
+}
+
+.shadow {
+    -webkit-box-shadow: 0px 0px 10px 1px rgba(153, 153, 153, 1);
+    -moz-box-shadow: 0px 0px 10px 1px rgba(153, 153, 153, 1);
+    box-shadow: 0px 0px 10px 1px rgba(153, 153, 153, 1);
+}
+
+.filters {
+    display: none;
+}
+
+#savedMessage {
+    color: green;
+    font-weight: bold;
+    padding: 10px;
+    display: none;
+}
+
+button, .custom-file-upload {
+    border: 1px solid #999999;
+    border-radius: 2px;
+    padding: 4px;
+    background: #F5F5F5;
+    cursor: pointer;
+}
+
+button:hover, .custom-file-upload:hover {
+    background: #CCC;
+    color: #333;
+}
+
+button:disabled, .custom-file-upload:disabled {
+    background: #DFDFDF;
+    color: #999;
+    border: 1px solid #CCC;
+    cursor: default;
+}
+
+.divButton {
+    display: inline-block;
+    font-size: 18px;
+    vertical-align: middle;
+    cursor: pointer;
+    transition: .3s ease-in-out;
+}
+
+.divButton:hover {
+    color: #0D775D;
+}
+
+#statBlock {
+    color: #7A200D;
+    border: 1px solid #7A200D;
+    padding: 5px;
+    background: #FDF1DC;
+    max-width: 400px;
+    margin: 5px;
+    position: absolute;
+    display: none;
+    z-index: 2;
+}
+
+#statBlock table {
+    background: transparent;
+}
+
+#statBlock th {
+    color: #7A200D;
+    background: transparent;
+}
+
+#statBlock th, #statBlock td {
+    border: 1px none #E5E5E5;
+}
+
+.noselect {
+    -webkit-touch-callout: none;
+    /* iOS Safari */
+    -webkit-user-select: none;
+    /* Safari */
+    -khtml-user-select: none;
+    /* Konqueror HTML */
+    -moz-user-select: none;
+    /* Firefox */
+    -ms-user-select: none;
+    /* Internet Explorer/Edge */
+    user-select: none;
+    /* Non-prefixed version, currently supported by Chrome and Opera */
+}
+
+.iconButton {
+    font-size: 13px;
+    cursor: pointer;
+    padding: 2px;
+}
+
+.infoIcon {
+    color: #336699;
+}
+
+.infoIcon:hover {
+    color: #6699CC;
+}
+
+.abilityTable {
+    text-align: center;
+}
+
+.properties {
+    color: #333;
+}
+
+.title {
+    font-weight: bold;
+    font-size: 16px;
+}
+
+hr {
+    border: 0;
+    border-top: 1px solid #7A200D;
+}
+
+hr.ability {
+    border: 0;
+    border-top: 3px double #7A200D;
+}
+
+.abs {
+    position: absolute;
+}
+
+.even {
+    background: #F5F5F5;
+}
+
+.mi {
+    font-family: 'Material Icons';
+}
+
+.inlineBlock {
+    display: inline-block;
+}
+
+.row {
+    display: table-row;
+}
+
+.cell {
+    display: table-cell;
+}
+
+.table {
+    display: table;
+}
+
+.padding4 {
+    padding: 4px;
+}
+
+.paddingR4 {
+    padding-right: 4px;
+}
+
+.flexSpace {
+    display: flex;
+    justify-content: space-between;
+}
+
+.vaMiddle {
+    vertical-align: middle;
+}
+
+.taLeft {
+    text-align: left;
+}
+
+.taCenter {
+    text-align: center;
+}
+
+.width100pct {
+    width: 100%;
+}
+
+.handCursor {
+    cursor: pointer;
+}
+
+.clear {
+    clear: both;
+}
+
+.taRight {
+    text-align: right;
+}
+
+.floatLeft {
+    float: left;
+}
+
+.floatRight {
+    float: right;
+}
+
+.expanderButton {
+    font-size: 14px;
+    /*\E5CF\; */
+}
+
+table {
+    background: white;
+    border-collapse: collapse;
+    width: 100%;
+}
+
+td, th {
+    padding: 2px;
+    text-align: center;
+}
+
+th {
+    color: #333;
+    background: #CCC;
+}
+
+.divScroll {
+    height: 150px;
+    width: 485px;
+    overflow-y: scroll;
+}
+
+.divScrollHeader {
+    width: 480px;
+    cursor: pointer;
+}
+
+.divScrollHeader th:nth-child(1), .divScroll td:nth-child(1) {
+    width: 260px;
+}
+
+.divScrollHeader th:nth-child(2), .divScroll td:nth-child(2), .divScrollHeader th:nth-child(3), .divScroll td:nth-child(3), .divScrollHeader th:nth-child(4), .divScroll td:nth-child(4) {
+    width: 65px;
+}
+
+th, td, .trackerList, .searchTable, .actionList {
+    border: 1px solid #E5E5E5;
+}
+
+.trackerList input {
+    width: 30px;
+    text-align: center;
+}
+
+.trackerList .bigInput {
+    width: auto;
+    text-align: left;
+}
+
+#createBlankPanel .bigInput {
+    width: 120px;
+    text-align: left;
+}
+
+#createBlankPanel input {
+    width: 40px;
+    text-align: center;
+}
+
+#createBlankPanel .newAction {
+    margin: 4px;
+    border: 1px solid #E0E0E0;
+}
+
+#createBlankPanel {
+    width: 500px;
+    padding: 10px;
+    display: none;
+    background: #FFF;
+}
+
+#createBlankPanel .actionList {
+    overflow-y: auto;
+    height: 150px;
+    margin: 4px 0px;
+}
+
+.border {
+    border: 1px solid #E0E0E0;
+}
+
+.noWrap {
+    white-space: noWrap;
+}
+
+.attackCombo {
+    border: 1px solid #E5E5E5;
+    color: #333;
+    position: relative;
+    display: inline-block;
+    width: 100%;
+}
+
+.attackComboList {
+    display: none;
+    border: 1px solid #E0E0E0;
+    z-index: 1;
+    width: 300px;
+}
+
+.attackComboItem {
+    padding: 5px;
+    text-align: left;
+    background: #FFF;
+    cursor: pointer;
+    overflow: hidden;
+    transition: .5s ease-in-out;
+}
+
+.attackComboItem:hover {
+    background: #E0E0E0;
+    color: #000;
+}
+
+.attackComboItemInner:hover {
+    background: #999;
+    color: #E5E5E5;
+}
+
+.attackComboItemInner {
+    border-bottom: 1px solid #E0E0E0;
+}
+
+.selectedAttack {
+    background: #CCC;
+    color: #000;
+}
+
+.attackComboItem .desc {
+    font-size: 11px;
+}
+
+#attackList {
+    display: none;
+    background: #FFF;
+    border: 1px solid #E0E0E0;
+    z-index: 1;
+    padding: 4px;
+}
+
+#attackList button {
+    margin: 4px;
+    width: 100%;
+}
+
+.invalidData {
+    color: #FF0033;
+    border: 1px dashed #FF0033;
+    background: #FDD;
+}
+
+#optionsPanel {
+    display: none;
+    background: #FFF;
+    border: 1px solid #E0E0E0;
+    z-index: 1;
+    padding: 5px;
+}
+
+.separator {
+    width: 1px;
+    height: 20px;
+    background: #666;
+    display: inline-block;
+    vertical-align: middle;
+    margin: 0px 4px;
+}
+
+.isTurn {
+    background: #0D775D;
+    color: white;
+}
+
+.isHit-add, .isHit-remove {
+    transition: .3s ease-in-out;
+}
+
+.isHit, .isHit-add.isHit-add-active {
+    background: #CC3D49;
+    color: white;
+}
+
+.isDead-add, .isDead-remove {
+    transition: .3s ease-in-out;
+}
+
+.isDead, .isDead-add.isDead-add-active {
+    background: #333;
+    color: white;
+}
+
+.confirmButton {
+    display: inline-block;
+    border: 1px solid #666;
+    border-radius: 2px;
+    padding: 0px 4px;
+    background: #F5F5F5;
+    cursor: pointer;
+    font-family: "Roboto", Georgia, serif;
+    font-size: 12px;
+    transition: .3s ease-in-out;
+}
+
+.confirmButton:hover {
+    background: #CCC;
+    color: #333;
+}
+
+/*scrollbar*/
+
+::-webkit-scrollbar {
+    width: 5px;
+    height: 5px;
+}
+
+::-webkit-scrollbar-button {
+    width: 0px;
+    height: 0px;
+}
+
+::-webkit-scrollbar-thumb {
+    background: #AAA;
+    border: 0px none #ffffff;
+    border-radius: 50px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+    background: #CCC;
+    cursor: pointer;
+}
+
+::-webkit-scrollbar-thumb:active {
+    background: #999;
+}
+
+::-webkit-scrollbar-track {
+    background: #EFEFEF;
+    border: 0px none #ffffff;
+    border-radius: 50px;
+}
+
+::-webkit-scrollbar-track:hover {
+    background: #999;
+}
+
+::-webkit-scrollbar-track:active {
+    background: #EFEFEF;
+}
+
+::-webkit-scrollbar-corner {
+    background: transparent;
+}
+
+/* checks e radios */
+
+.control {
+    display: block;
+    position: relative;
+    padding-left: 20px;
+    margin-bottom: 2px;
+    margin-left: 4px;
+    padding-top: 3px;
+    cursor: pointer;
+    white-space: nowrap;
+}
+
+.control input {
+    position: absolute;
+    z-index: -1;
+    opacity: 0;
+}
+
+.control__indicator {
+    position: absolute;
+    top: 2px;
+    left: 0;
+    height: 16px;
+    width: 16px;
+    background: #e6e6e6;
+}
+
+.control--radio .control__indicator {
+    border-radius: 50%;
+}
+
+.control:hover input~.control__indicator, .control input:focus~.control__indicator {
+    background: #99200D;
+}
+
+.control input:checked~.control__indicator {
+    background: #7A200D;
+}
+
+.control:hover input:not([disabled]):checked~.control__indicator, .control input:checked:focus~.control__indicator {
+    background: #99200D;
+}
+
+.control input:disabled~.control__indicator {
+    background: #e6e6e6;
+    opacity: 0.6;
+    pointer-events: none;
+}
+
+.control__indicator:after {
+    content: '';
+    position: absolute;
+    display: none;
+}
+
+.control input:checked~.control__indicator:after {
+    display: block;
+}
+
+.control--checkbox .control__indicator:after {
+    left: 6px;
+    top: 2px;
+    width: 3px;
+    height: 8px;
+    border: solid #fff;
+    border-width: 0 2px 2px 0;
+    transform: rotate(45deg);
+}
+
+.control--checkbox input:disabled~.control__indicator:after {
+    border-color: #7b7b7b;
+}
+
+.control--radio .control__indicator:after {
+    left: 5px;
+    top: 5px;
+    height: 6px;
+    width: 6px;
+    border-radius: 50%;
+    background: #fff;
+}
+
+.control--radio input:disabled~.control__indicator:after {
+    background: #7b7b7b;
+}
+
+input[type="file"] {
+    display: none;
+}
+
+.custom-file-upload{
+    display: inline-block;
+    vertical-align: top;
+}
